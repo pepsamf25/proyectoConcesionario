@@ -41,15 +41,14 @@
             
             document.getElementById("nombre").value = coche.nombre;
             document.getElementById("descripcion").value = coche.descripcion;
-            document.getElementById("ingredientes").value = coche.ingredientes;
             document.getElementById("precio").value = coche.precio;
             document.getElementById("foto").src = coche.foto;
         }
 
         function guardar() {
+            console.log("Correcto");
             let nombre = document.getElementById("nombre").value;
             let descripcion= document.getElementById("descripcion").value;
-            let ingredientes = document.getElementById("ingredientes").value;
             let precio = document.getElementById("precio").value;
            // let precioIVA = document.getElementById("precioIVA").value;
             let foto = document.getElementById("foto").value;
@@ -57,7 +56,6 @@
                 "id": id,
                 "nombre": nombre,
                 "descripcion": descripcion,
-                "ingredientes": ingredientes,
                 "precio": precio,
               //  "precioIVA": precioIVA,
                 "foto": foto
@@ -118,8 +116,6 @@
                 <input required type="text" class="input" placeholder="Nombre" name="nombre" id="nombre">
                 <label for="descripcion">Descripcion</label>
                 <input required type="text" class="input" placeholder="Descripcion" name="descripcion" id="descripcion">
-                <label for="ingredientes">Ingredientes</label>
-                <input required type="text" class="input" placeholder="Ingredientes" name="ingredientes" id="ingredientes">
                 <label for="precio">Precio</label>
                 <input required type="number" class="input" placeholder="Precio" name="precio" id="precio">
                 <input required type="text" class="input" placeholder="Foto" name="foto" id="foto">                

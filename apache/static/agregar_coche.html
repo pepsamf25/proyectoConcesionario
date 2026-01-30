@@ -16,13 +16,11 @@
         function guardar(){
             let nombre=document.getElementById("nombre").value;
             let descripcion=document.getElementById("descripcion").value;
-            let ingredientes =document.getElementById("ingredientes").value;
             let precio=document.getElementById("precio").value;
             let foto=document.getElementById("foto").value;
             let datos=JSON.stringify({
                 "nombre":nombre,
                 "descripcion":descripcion,
-                "ingredientes":ingredientes,
                 "precio":precio,
                 "foto":foto
             });
@@ -36,10 +34,10 @@
                 .then(response => response.json())
                 .then(result => {
                     if (result.status == "OK"){
-                        alert("Chuche guardada")
+                        alert("Coche guardado")
                         location.href="coches.html"
                     } else {
-                        alert("La coche no ha podido ser guardado")
+                        alert("El coche no ha podido ser guardado")
                     }
                 })
                 .catch(error => {
@@ -72,13 +70,11 @@
   <section class="section">
     <div class="columns">
         <div class="column">
-            <h3 class="is-size-3">Agregar Chuche</h3>
+            <h3 class="is-size-3">Agregar coche</h3>
                 <label for="nombre">Nombre:</label>
                 <input required type="text" class="input" placeholder="Nombre" name="nombre" id="nombre">
                 <label for="descripcion">Descripcion</label>
                 <input required type="text" class="input" placeholder="Descripcion" name="descripcion" id="descripcion">
-                <label for="ingredientesS">Ingredientes</label>
-                <input required type="text" class="input" placeholder="Ingredientes" name="ingredientes" id="ingredientes">
                 <label for="precio">Precio</label>
                 <input required type="number" class="input" placeholder="Precio" name="precio" id="precio">
                 <label for="foto">Foto</label>
