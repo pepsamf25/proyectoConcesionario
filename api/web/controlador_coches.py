@@ -7,7 +7,7 @@ def convertir_coche_a_json(coche):
     d['nombre'] = coche[1]
     d['descripcion'] = coche[2]
     d['precio'] = float(coche[3])
-    d['precioiva'] = float(calculariva(float(coche[3])) + coche[3])
+    d['precioiva'] = float(calculariva(float(coche[3])))
     d['foto'] = coche[4]
     return d         
 
