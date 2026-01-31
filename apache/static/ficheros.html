@@ -38,24 +38,30 @@
         }
 
         function verArchivo(){
-            var requestOptions = {
-                method: 'GET',
-            };
+  fetch("/api/ficheros/" + encodeURIComponent(document.getElementById("nombreArchivo").value))
+    .then(async response => {
+      let data = null;
 
-            fetch("/api/ficheros/" + document.getElementById("nombreArchivo").value, requestOptions)
-                .then(response => response.json())
-                .then(result => {
-                    if (result.status == "OK"){
-                        document.getElementById("contenidoArchivo").innerText=result.contenido;
-                    } else {
-                        document.getElementById("contenidoArchivo").innerText="EL CONTENIDO NO ESTA DISPONIBLE";                        
-                    }
-                })
-                .catch(error => {
-                    console.log('error', error);
-                    alert("Ha habido un error al recuperar el archivo. Refresque la página")
-                });
-        }
+      try {
+        data = await response.json();
+      } catch {
+        // el body no era JSON (HTML, texto plano...)
+      }
+
+      if (response.ok) {
+        document.getElementById("contenidoArchivo").innerText = data?.contenido ?? "";
+      } else {
+        document.getElementById("contenidoArchivo").innerText =
+          data?.error ?? "EL CONTENIDO NO ESTA DISPONIBLE";
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      alert("Ha habido un error al recuperar el archivo. Refresque la página");
+    });
+}
+
+
  
     </script>
 </head>

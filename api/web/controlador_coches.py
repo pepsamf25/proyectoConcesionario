@@ -1,6 +1,6 @@
 from bd import obtener_conexion
 import sys
-
+from decimal import Decimal, InvalidOperation
 
 def convertir_coche_a_json(coche):
     d = {}
@@ -72,9 +72,10 @@ def eliminar_coche(id):
         code=500
     return ret,code
 
-def actualizar_coche(id, nombre, precio, descripcion, foto):
+def actualizar_coche(id, nombre, descripcion, precio, foto):
     try:
         conexion = obtener_conexion()
+        
         with conexion.cursor() as cursor:
             cursor.execute(
                 "UPDATE coches SET nombre=%s, descripcion=%s, precio=%s, foto=%s WHERE id=%s",

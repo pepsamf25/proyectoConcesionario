@@ -2,6 +2,8 @@ from __future__ import print_function
 import os
 import sys
 import subprocess
+import traceback
+from flask import jsonify
 
 
 def guardar_fichero(nombre,contenido):
@@ -24,13 +26,23 @@ def ver_fichero(nombre):
     try:
         basepath = os.path.dirname(__file__) # ruta del archivo actual
         ruta_fichero = os.path.join (basepath,'static/archivos',nombre) 
-        salida=subprocess.getoutput("cat " + ruta_fichero)
+        #salida=subprocess.getoutput("cat " + ruta_fichero)
+        salida = open(ruta_fichero, "r", encoding="utf-8", errors="replace")
+        salida = salida.read()
         respuesta={"contenido": salida}
         code=200
-    except:
-        print("Excepcion al ver el fichero", flush=True)   
-        respuesta={"contenido":""}
-        code=500
-    return respuesta,code    
+        return respuesta, 200
+        
+        #ruta_fichero = os.path.join("/app", "static", "archivos", nombre)
+        #salida = open(ruta_fichero, "r", encoding="utf-8", errors="replace")
+        #respuesta = salida.read()
+        #respuesta = {"contenido": respuesta}
+        #print(respuesta)
+        #return respuesta, 200
+    
+    except Exception as e:
+        print("Excepcion al ver el fichero", e)   
+        traceback.print_exc()
+        return {"Error": str(e)}, 500    
 
 
