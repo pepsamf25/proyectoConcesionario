@@ -1,6 +1,5 @@
 from bd import obtener_conexion
-import sys
-from decimal import Decimal, InvalidOperation
+from calculos import calculariva
 
 def convertir_coche_a_json(coche):
     d = {}
@@ -8,10 +7,12 @@ def convertir_coche_a_json(coche):
     d['nombre'] = coche[1]
     d['descripcion'] = coche[2]
     d['precio'] = float(coche[3])
+    d['precioiva'] = float(calculariva(float(coche[3])) + coche[3])
     d['foto'] = coche[4]
-    return d
+    return d         
 
 def insertar_coche(nombre, descripcion, precio,foto):
+    
     conexion = obtener_conexion()
     with conexion.cursor() as cursor:
         cursor.execute("INSERT INTO coches(nombre, descripcion, precio,foto) VALUES (%s, %s, %s,%s)",
@@ -27,7 +28,7 @@ def obtener_coches():
     try:
         conexion = obtener_conexion()
         with conexion.cursor() as cursor:
-            cursor.execute("SELECT id, nombre, descripcion, precio,foto FROM coches")
+            cursor.execute("SELECT id, nombre, descripcion, precio, foto FROM coches")
             coches = cursor.fetchall()
             if coches:
                 for coche in coches:

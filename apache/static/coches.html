@@ -17,6 +17,8 @@
         onload=function(){
             pedirCoches();
         }
+
+
         function pintarCoches(lista){
             let tbody=document.getElementsByTagName("tbody")[0];
             tbody.innerText="";
@@ -27,7 +29,7 @@
                         <td>${coche.nombre}</td>
                         <td>${coche.descripcion}</td>
                         <td>${coche.precio}</td>
-                        <td>${coche.precio}</td>
+                        <td>${coche.precioiva}</td>
                         <td>`
                 texto+=`<a href="editar_coche.html?id=${coche.id}" class="button is-info">Editar</a>
                         </td>
@@ -38,6 +40,8 @@
                 tbody.innerHTML+=texto                            
             });
         }
+
+
         function pedirCoches(){
             var requestOptions = {
                 method: 'GET',
