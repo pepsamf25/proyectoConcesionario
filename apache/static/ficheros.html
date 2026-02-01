@@ -12,6 +12,8 @@
     <script>
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+
+        //funcion para enivar la info a la bd
         function enviarArchivo(){
             const formData = new FormData();
             formData.append('fichero',document.getElementById("fichero").files[0]);
@@ -37,6 +39,7 @@
                 });
         }
 
+        //funcion para mostrar el archivo deseado
         function verArchivo(){
   fetch("/api/ficheros/" + encodeURIComponent(document.getElementById("nombreArchivo").value))
     .then(async response => {

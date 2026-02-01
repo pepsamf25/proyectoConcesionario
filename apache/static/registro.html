@@ -19,6 +19,7 @@
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
+        //funcion para sacar la info de la bd y verificar la autenticidad
         function conectar(){
             document.getElementsByClassName("error")[0].style.display="none";
             var raw = JSON.stringify({

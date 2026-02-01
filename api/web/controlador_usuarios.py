@@ -2,6 +2,7 @@ from bd import obtener_conexion
 import sys
 import datetime as dt
 
+#verifica que los datos coinciden con los de la bd
 def login_usuario(username,password):
     try:
         conexion = obtener_conexion()
@@ -21,6 +22,7 @@ def login_usuario(username,password):
         code=500
     return ret,code
 
+#meter el nuevo usuario en la bd
 def alta_usuario(username,password,perfil):
     try:
         conexion = obtener_conexion()

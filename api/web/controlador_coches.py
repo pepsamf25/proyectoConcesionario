@@ -1,6 +1,7 @@
 from bd import obtener_conexion
 from calculos import calculariva
 
+
 def convertir_coche_a_json(coche):
     d = {}
     d['id'] = coche[0]
@@ -11,6 +12,7 @@ def convertir_coche_a_json(coche):
     d['foto'] = coche[4]
     return d         
 
+#funcion para meter el coche en la bd
 def insertar_coche(nombre, descripcion, precio,foto):
     
     conexion = obtener_conexion()
@@ -23,6 +25,7 @@ def insertar_coche(nombre, descripcion, precio,foto):
     code=200
     return ret,code
 
+#funcion para tomar los coches de la bd
 def obtener_coches():
     cochesjson=[]
     try:
@@ -40,6 +43,7 @@ def obtener_coches():
         code=500
     return cochesjson,code
 
+#tomar un solo coche de la bd
 def obtener_coche_por_id(id):
     cochejson = {}
     try:
@@ -55,6 +59,8 @@ def obtener_coche_por_id(id):
         print("Excepcion al consultar un coche", flush=True)
         code=500
     return cochejson,code
+
+#funcion para eliminar un coche determinado mediante el id
 def eliminar_coche(id):
     try:
         conexion = obtener_conexion()
@@ -73,6 +79,7 @@ def eliminar_coche(id):
         code=500
     return ret,code
 
+#funcion para modificar la info del coche mediante el id
 def actualizar_coche(id, nombre, descripcion, precio, foto):
     try:
         conexion = obtener_conexion()

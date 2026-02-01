@@ -5,7 +5,7 @@ import subprocess
 import traceback
 from flask import jsonify
 
-
+#funcion para guardar el fichero 
 def guardar_fichero(nombre,contenido):
     try:
         print(nombre, flush=True)
@@ -22,6 +22,7 @@ def guardar_fichero(nombre,contenido):
         code=500
     return respuesta, code
 
+#funcion para ver el fichero 
 def ver_fichero(nombre):
     try:
         basepath = os.path.dirname(__file__) # ruta del archivo actual

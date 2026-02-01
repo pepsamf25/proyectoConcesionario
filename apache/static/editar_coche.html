@@ -21,6 +21,8 @@
         onload = function () {
             obtenerDatosCoche(id);
         }
+
+        //request GET para tomar los valores de la base de datos
         function obtenerDatosCoche(id) {
             var requestOptions = {
                 method: 'GET',
@@ -36,6 +38,8 @@
                 });
 
         }
+
+        //funcion para mostrar los valores del coche
         function pintarCoche(coche) {
             console.log(coche);
             
@@ -45,6 +49,7 @@
             document.getElementById("foto").src = coche.foto;
         }
 
+        //función para guardar la informacion modificada en la bd
         function guardar() {
             console.log("Correcto");
             let nombre = document.getElementById("nombre").value;

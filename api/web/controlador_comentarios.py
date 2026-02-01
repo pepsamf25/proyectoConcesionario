@@ -10,6 +10,7 @@ def convertir_comentario_a_json(comentario):
     d['descripcion'] = comentario[2]
     return d
 
+#funcino para meter nuevos comentarios a la bd
 def insertar_comentario(usuario, descripcion):
     try:
         conexion = obtener_conexion()
@@ -25,6 +26,7 @@ def insertar_comentario(usuario, descripcion):
         code=500   
     return ret,code
 
+#fncion para obtener los comentarios de la bd
 def obtener_comentarios():
     comentariosjson=[]
     try:
