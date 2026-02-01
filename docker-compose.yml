@@ -4,13 +4,13 @@ services:
     container_name: mariadbb10
     restart: unless-stopped
     environment:
-      MARIADB_ROOT_PASSWORD: example
-      MARIADB_USER: agente
-      MARIADB_USER_PASSWORD: 0traClave
-      MARIADB_DATABASE: concesionario
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_USER_PASSWORD: ${MARIADB_USER_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
     volumes:
-      - mariadb_data:/var/lib/mysql
-      - ./Concesionario.sql://docker-entrypoint-initdb.d/Concesionario.sql:ro
+      - mariadb_datab10:/var/lib/mysql
+      - ./Concesionario.sql:/docker-entrypoint-initdb.d/Concesionario.sql:ro
     user: mysql
   phpmyadmin:
     image: phpmyadmin
@@ -19,23 +19,24 @@ services:
     environment:
       - PMA_HOST=mariadb
     ports:
-      - 720:80
+      - 7110:80
     depends_on:
       - mariadb
   python:
     build: ./api
     container_name: pythonb10
     env_file:
-      - api.env
+      - .env
     depends_on:
       - mariadb
   apache-waf:
     build: ./apache #./waf/ en un futuro
+    container_name: apacheb10
     ports:
-      - 9100:80
+      - 6110:80
     depends_on:
       - python
     links:
       - python
 volumes:
-  mariadb_data:
+  mariadb_datab10:
