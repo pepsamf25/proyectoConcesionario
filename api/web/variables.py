@@ -1,9 +1,11 @@
 import os
 def cargarvariables():
-    os.environ['DB_USERNAME']='root'
-    os.environ['DB_PASSWORD']='example'
-    os.environ['DB_DATABASE']='ciber'
-    os.environ['DB_HOST']='localhost'
-    os.environ['DB_PORT']='3306'
-    os.environ['PORT']='8080'
-    os.environ['HOST']='0.0.0.0'
+    return {
+         "DB_USERNAME": os.getenv("DB_USER"),
+        "DB_PASSWORD": os.getenv("DB_PASSWORD"),
+        "DB_DATABASE": os.getenv("DB_NAME"),
+        "DB_HOST": os.getenv("DB_HOST"),
+        "DB_PORT": os.getenv("DB_PORT"),
+        "PORT": os.getenv("PORT"),
+        "HOST": os.getenv("HOST")
+    }
