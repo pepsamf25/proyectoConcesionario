@@ -34,7 +34,7 @@
                 .then(response => response.json())
                 .then(result => pintarCoche(result))
                 .catch(error => {
-                    alert("Ha habido un error al recuperar los datos del libro");
+                    alert("Ha habido un error al recuperar los datos de los coches.");
                     location.href = "coches.html";
                 });
 
@@ -120,8 +120,8 @@
                 <h3 class="is-size-3">Editar coche</h3>
                 <label for="nombre">Nombre:</label>
                 <input required type="text" class="input" placeholder="Nombre" name="nombre" id="nombre">
-                <label for="descripcion">Descripcion</label>
-                <input required type="text" class="input" placeholder="Descripcion" name="descripcion" id="descripcion">
+                <label for="descripcion">Descripción</label>
+                <input required type="text" class="input" placeholder="Descripción" name="descripcion" id="descripcion">
                 <label for="precio">Precio</label>
                 <input required type="number" class="input" placeholder="Precio" name="precio" id="precio">
                 <input required type="text" class="input" placeholder="Foto" name="foto" id="foto">                

@@ -40,12 +40,12 @@
                         alert("Coche guardado")
                         location.href="coches.html"
                     } else {
-                        alert("El coche no ha podido ser guardado")
+                        alert("El coche no ha podido ser guardado.")
                     }
                 })
                 .catch(error => {
                     console.log('error', error);
-                    alert("Se ha producido un error y la coche no ha podido ser guardado")
+                    alert("Se ha producido un error y el coche no ha podido ser guardado.")
                 });
         }
     </script>
@@ -74,10 +74,10 @@
     <div class="columns">
         <div class="column">
             <h3 class="is-size-3">Agregar coche</h3>
-                <label for="nombre">Nombre:</label>
+                <label for="nombre">Nombre</label>
                 <input required type="text" class="input" placeholder="Nombre" name="nombre" id="nombre">
-                <label for="descripcion">Descripcion</label>
-                <input required type="text" class="input" placeholder="Descripcion" name="descripcion" id="descripcion">
+                <label for="descripcion">Descripción</label>
+                <input required type="text" class="input" placeholder="Descripción" name="descripcion" id="descripcion">
                 <label for="precio">Precio</label>
                 <input required type="number" class="input" placeholder="Precio" name="precio" id="precio">
                 <label for="foto">Foto</label>

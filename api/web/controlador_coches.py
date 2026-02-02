@@ -13,11 +13,11 @@ def convertir_coche_a_json(coche):
     return d         
 
 #funcion para meter el coche en la bd
-def insertar_coche(nombre, descripcion, precio,foto):
+def insertar_coche(nombre, descripcion, precio, foto):
     
     conexion = obtener_conexion()
     with conexion.cursor() as cursor:
-        cursor.execute("INSERT INTO coches(nombre, descripcion, precio,foto) VALUES (%s, %s, %s,%s)",
+        cursor.execute("INSERT INTO coches(nombre, descripcion, precio, foto) VALUES (%s, %s, %s,%s)",
                        (nombre, descripcion, precio,foto))
     conexion.commit()
     conexion.close()
