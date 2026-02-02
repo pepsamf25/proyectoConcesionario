@@ -18,3 +18,7 @@ CREATE TABLE usuarios(
     perfil VARCHAR(100) NOT NULL
 );
 INSERT INTO `usuarios` (`usuario`, `clave`, `perfil`) VALUES ('root','1234', 'admin');
+
+CREATE USER 'grupob10'@'%' IDENTIFIED BY 'b10clave$1234';
+GRANT ALL PRIVILEGES ON concesionario.* TO 'grupob10'@'%';
+FLUSH PRIVILEGES;
