@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: python-api
-          image: francesdbz18/pythonb10:latest  # ← CAMBIA por tu imagen exacta
+          image: francesdbz18/pythonb10:latest
           ports:
             - containerPort: 8090
           envFrom:
