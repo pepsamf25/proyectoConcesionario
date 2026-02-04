@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: python-api
+  name: python
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: python-api
+      app: python
   template:
     metadata:
       labels:
-        app: python-api
+        app: python
     spec:
       containers:
-        - name: python-api
+        - name: python
           image: francesdbz18/pythonb10:latest
           ports:
             - containerPort: 8090
@@ -24,10 +24,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: python-api
+  name: python
 spec:
   selector:
-    app: python-api
+    app: python
   ports:
     - port: 8090
       targetPort: 8090
