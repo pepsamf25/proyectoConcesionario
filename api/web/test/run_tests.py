@@ -14,7 +14,7 @@ def ejecutar_pruebas():
     
     loader = unittest.TestLoader()
     
-    suite = loader.discover('.', pattern='test_*.py')
+    suite = loader.discover('api/web/test', pattern='test_*.py')
     
     stream = StringIO()
     runner = unittest.TextTestRunner(stream=stream, verbosity=2)
