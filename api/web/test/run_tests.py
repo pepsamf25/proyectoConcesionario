@@ -3,7 +3,7 @@ import sys
 from io import StringIO
 import time
 
-
+#TODO: cambiar las rutas otra vez. Tienen que estar al mismo nivel que /api/.
 def ejecutar_pruebas():
     """Ejecuta todas las pruebas y genera un reporte"""
     
