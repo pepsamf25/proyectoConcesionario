@@ -1,5 +1,5 @@
-def test_coches_page(driver):
-    driver.get(f"{APP_URL}coches.html")
+def test_coches_page(driver, app_url):
+    driver.get(f"{app_url}coches.html")
     assert "Visualizar coches" in driver.title
     
     # Navbar con enlaces funcionales

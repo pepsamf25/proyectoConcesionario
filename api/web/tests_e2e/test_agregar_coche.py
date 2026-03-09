@@ -1,5 +1,5 @@
-def test_agregar_coche_form(driver):
-    driver.get(f"{APP_URL}agregar_coche.html")
+def test_agregar_coche_form(driver, app_url):
+    driver.get(f"{app_url}agregar_coche.html")
     assert "Agregar coches" in driver.title
     
     # Verificar todos los campos del formulario

@@ -1,5 +1,5 @@
-def test_index_login_page(driver):
-    driver.get(f"{APP_URL}")
+def test_index_login_page(driver, app_url):
+    driver.get(f"{app_url}")
     assert "Aplicación de Concesionario" in driver.title
     driver.find_element(By.ID, "username")
     driver.find_element(By.ID, "password")
