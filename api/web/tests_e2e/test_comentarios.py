@@ -1,3 +1,5 @@
+from selenium.webdriver.common.by import By
+
 def test_comentarios_page(driver, app_url):
     driver.get(f"{app_url}comentarios.html")
     assert "Comentarios" in driver.title

@@ -1,3 +1,5 @@
+from selenium.webdriver.common.by import By
+
 def test_coches_page(driver, app_url):
     driver.get(f"{app_url}coches.html")
     assert "Visualizar coches" in driver.title

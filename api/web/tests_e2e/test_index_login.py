@@ -1,3 +1,5 @@
+from selenium.webdriver.common.by import By
+
 def test_index_login_page(driver, app_url):
     driver.get(f"{app_url}")
     assert "Aplicación de Concesionario" in driver.title

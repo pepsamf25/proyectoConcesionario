@@ -1,3 +1,5 @@
+from selenium.webdriver.common.by import By
+
 def test_agregar_coche_form(driver, app_url):
     driver.get(f"{app_url}agregar_coche.html")
     assert "Agregar coches" in driver.title
