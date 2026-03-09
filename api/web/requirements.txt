@@ -2,3 +2,6 @@ PyMySQL
 Flask==1.1.4
 markupsafe==2.0.1
 python-dotenv
+selenium>=4.17.0
+pytest
+webdriver-manager
