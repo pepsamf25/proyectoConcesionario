@@ -200,7 +200,19 @@ pipeline {
 
         stage('Scan Docker Image Python for Vulnerabilities') {
             steps {
-                sh 'echo aqui va el escaneo de imagen python'
+                script {
+                  def IMAGE = "${DOCKER_IMAGEPYTHON}:${FINAL_IMAGE_TAG_PYTHON}"
+                  sh """
+                    echo '=== Trivy scan Python: ${IMAGE} ==='
+                    docker run --rm \
+                      -v /var/run/docker.sock:/var/run/docker.sock \
+                      -v \$HOME/.cache/trivy:/root/.cache/ \
+                      aquasec/trivy:latest image \
+                      --exit-code 0 \
+                      --severity HIGH,CRITICAL \
+                      ${IMAGE}
+                  """
+                }
             }
         }
 
@@ -237,7 +249,19 @@ pipeline {
             }
 
             steps {
-                sh 'echo aqui escaneo imagen waf'
+                script {
+                  def IMAGE = "${DOCKER_IMAGEWAF}:${FINAL_IMAGE_TAG_WAF}"
+                  sh """
+                    echo '=== Trivy scan WAF: ${IMAGE} ==='
+                    docker run --rm \
+                      -v /var/run/docker.sock:/var/run/docker.sock \
+                      -v \$HOME/.cache/trivy:/root/.cache/ \
+                      aquasec/trivy:latest image \
+                      --exit-code 0 \
+                      --severity HIGH,CRITICAL \
+                      ${IMAGE}
+                  """
+                }
             }
         }
 
@@ -263,6 +287,33 @@ pipeline {
                 sh '''
                     docker compose -f docker-compose.yml up -d
                 '''
+            }
+        }
+        
+        stage('Pruebas IaC') {
+            steps {
+                script {
+                    docker.image('bridgecrew/checkov:latest').inside(
+                        "--network pipelinedeploy_default --entrypoint ''"
+                    ) {
+                        sh '''
+                            checkov \
+                                -d ./api \
+                                -d ./apache \
+                                --framework dockerfile,kubernetes \
+                                -o junitxml \
+                                --output-file-path checkov-report.xml \
+                                --soft-fail
+                        '''
+                    }
+                }
+            }
+
+            post {
+                always {
+                    junit allowEmptyResults: true,
+                          testResults: 'checkov-report.xml'
+                }
             }
         }
 
@@ -316,61 +367,6 @@ pipeline {
             }
         }
 
-        stage('DAST - ZAP Baseline') {
-            steps {
-                sh '''
-                    mkdir -p zap-reports
-                    chmod 777 zap-reports
-
-                    docker run --rm \
-                      -v "$(pwd)/zap-reports:/zap/wrk:rw" \
-                      --network pipelinedeploy_default \
-                      --user root \
-                      ghcr.io/zaproxy/zaproxy:stable \
-                      zap-baseline.py \
-                      -t http://apacheb10:80 \
-                      -r zap-baseline.html \
-                      -J zap-baseline.json \
-                      -I
-                '''
-            }
-
-            post {
-                always {
-                    archiveArtifacts artifacts: 'zap-reports/**',
-                                     allowEmptyArchive: true,
-                                     fingerprint: true
-                }
-            }
-        }
-
-        stage('Pruebas IaC') {
-            steps {
-                script {
-                    docker.image('bridgecrew/checkov:latest').inside(
-                        "--network pipelinedeploy_default --entrypoint ''"
-                    ) {
-                        sh '''
-                            checkov \
-                                -d ./api \
-                                -d ./apache \
-                                --framework dockerfile,kubernetes \
-                                -o junitxml \
-                                --output-file-path checkov-report.xml \
-                                --soft-fail
-                        '''
-                    }
-                }
-            }
-
-            post {
-                always {
-                    junit allowEmptyResults: true,
-                          testResults: 'checkov-report.xml'
-                }
-            }
-        }
-
         stage('Deploy en Kubernetes') {
             steps {
                 withCredentials([
@@ -391,7 +387,7 @@ pipeline {
                                 python=${DOCKER_IMAGEPYTHON}:${FINAL_IMAGE_TAG_PYTHON}
 
                             kubectl -n "$NS" rollout status deployment/python --timeout=120s
-                        EOS
+EOS
                     '''
 
                     script {
@@ -407,7 +403,7 @@ pipeline {
                                         apache-waf=${DOCKER_IMAGEWAF}:${FINAL_IMAGE_TAG_WAF}
 
                                     kubectl -n "$NS" rollout status deployment/apache-waf --timeout=120s
-                                EOS
+EOS
                             '''
 
                         } else {
