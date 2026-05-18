@@ -6,11 +6,8 @@
 
 ### Seguridad:
 - Inyección XSS:
-    - Controlar el Content-type de cada petición 
-    - Utilizar el método before_request en el archivo app.py
-    - En todas las rutas se utiliza g.cleaned_json. 
+    - Controlar el Content-type de cada petición  
     - HAY QUE VALIDAR (comparar tipos, tamaño, posibles valores,,) TODOS LOS DATOS QUE SE RECIBEN Y SOBRE TODO SI SON ARCHIVOS
-    - Sanitizar/Codificar la salida: en todos los controladores donde se devuelvan datos. Por ejemplo, en el archivo controladores_chuches.py
 - Cifrado de claves:
     - PEPPER_KEY -> pasar variable de entorno a docker-compose + kubernetes
 - Evitar CSRF:
