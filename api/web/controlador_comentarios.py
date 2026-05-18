@@ -15,7 +15,7 @@ def insertar_comentario(usuario, descripcion):
     try:
         conexion = obtener_conexion()
         with conexion.cursor() as cursor:
-            cursor.execute("INSERT INTO comentarios(usuario, descripcion) VALUES ('"+ usuario +"','" + descripcion + "')")
+            cursor.execute("INSERT INTO comentarios(usuario, descripcion) VALUES (%s, %s)", (usuario, descripcion))
             conexion.commit()
         conexion.close()
         ret={"status": "OK" }

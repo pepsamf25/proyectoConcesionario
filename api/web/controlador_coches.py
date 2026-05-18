@@ -49,7 +49,7 @@ def obtener_coche_por_id(id):
     try:
         conexion = obtener_conexion()
         with conexion.cursor() as cursor:
-            cursor.execute("SELECT id, nombre, descripcion, precio, foto FROM coches WHERE id =" + id)
+            cursor.execute("SELECT id, nombre, descripcion, precio, foto FROM coches WHERE id = (%s)", (id,))
             coche = cursor.fetchone()
             if coche is not None:
                 cochejson = convertir_coche_a_json(coche)
