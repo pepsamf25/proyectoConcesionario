@@ -5,3 +5,4 @@ python-dotenv
 selenium>=4.17.0
 pytest
 webdriver-manager
+bleach
