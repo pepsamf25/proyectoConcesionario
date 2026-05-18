@@ -13,18 +13,14 @@ def login():
         usuario = comentario_json['usuario']
         descripcion = comentario_json['descripcion']
         respuesta,code= controlador_comentarios.insertar_comentario(usuario,descripcion)
+        response=make_response(jsonify(respuesta),code)
     else:
         respuesta={"status":"Bad request"}
         code=401
-    return jsonify(respuesta), code
+    return response
 
 @bp.route("/",methods=['GET'])
 def consultaComentarios():
     respuesta,code= controlador_comentarios.obtener_comentarios()
-    return jsonify(respuesta), code
-
-@bp.route("/logout",methods=['GET'])
-def logout():
-    respuesta,code= controlador_usuarios.logout()
     response=make_response(jsonify(respuesta),code)
     return response

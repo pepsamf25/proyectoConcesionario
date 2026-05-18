@@ -13,10 +13,11 @@ def login():
         username = login_json['username']
         password = login_json['password']
         respuesta,code= controlador_usuarios.login_usuario(username,password)
+        response=make_response(jsonify(respuesta),code)
     else:
         respuesta={"status":"Bad request"}
         code=401
-    return jsonify(respuesta), code
+    return response
 
 @bp.route("/registro",methods=['POST'])
 def registro():
@@ -27,18 +28,15 @@ def registro():
         password = login_json['password']
         profile = login_json['profile']
         respuesta,code= controlador_usuarios.alta_usuario(username,password,profile)
+        response=make_response(jsonify(respuesta),code)
     else:
         respuesta={"status":"Bad request"}
         code=401
-    return jsonify(respuesta), code
-def logout():
- respuesta,code= controlador_usuarios.logout()
- response=make_response(jsonify(respuesta),code)
- return response
-
+    return response
 
 @bp.route("/logout",methods=['GET'])
 def logout():
     respuesta,code= controlador_usuarios.logout()
-    return jsonify(respuesta), code
+    response=make_response(jsonify(respuesta),code)
+    return response
 

@@ -13,23 +13,20 @@ def upload():
         contenido= request.files['fichero'] 
         nombre = request.form.get("nombre")
         respuesta,code = controlador_ficheros.guardar_fichero(nombre,contenido)
+        response=make_response(jsonify(respuesta),code)
     except Exception as e:
         print(f"Error subiendo archivo: {e}", flush=True)
         respuesta={"status": "ERROR"}
         code=500
-    return jsonify(respuesta), code
+    return response
 
 @bp.route ('/<archivo>', methods=['GET']) 
 def ver(archivo):
     try:
         respuesta,code = controlador_ficheros.ver_fichero(archivo)
+        response=make_response(jsonify(respuesta),code)
     except:
         respuesta= {"status": "ERROR"}
         code=500
-    return jsonify(respuesta), code
+    return response
 
-@bp.route("/logout",methods=['GET'])
-def logout():
- respuesta,code= controlador_usuarios.logout()
- response=make_response(jsonify(respuesta),code)
- return response
