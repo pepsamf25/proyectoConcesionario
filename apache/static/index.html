@@ -20,9 +20,16 @@
     <script>
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+
+        //Token CSRF
+        if (sessionStorage.getItem("csrf_token")){  
+            myHeaders.append("X-CSRFToken",sessionStorage.getItem("csrf_token"))  
+        }  
+
         function verComentarios() {
             location.href="comentarios.html";
         }
+        
         function conectar() {
             document.getElementsByClassName("error")[0].style.display = "none";
             var raw = JSON.stringify({
@@ -40,6 +47,8 @@
                 .then(response => response.json())
                 .then(result => {
                     if (result.status == "OK") {
+                        sessionStorage.setItem("csrf_token",result.csrf_token)  
+                        sessionStorage.setItem("perfil",result.perfil)  
                         location.href = "coches.html";
                     } else {
                         document.getElementsByClassName("error")[0].style.display = "block";

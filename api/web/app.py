@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, g
 import os
+from flask_wtf.csrf import CSRFProtect 
 from variables import cargarvariables
 from funciones_auxiliares import sanitize_field
 
@@ -8,6 +9,13 @@ def create_app():
 
     # configuración...
     app.config.setdefault('DEBUG', True)
+    app.config.from_pyfile('settings.py')
+    csrf = CSRFProtect(app)
+
+   @app.before_request
+    def csrf_protect():
+       if not request.path.startswith("/login") and not request.path.startswith("/registro"):
+           csrf.protect()
 
     @app.before_request
     def clean_request():
