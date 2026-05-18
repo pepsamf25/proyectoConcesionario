@@ -4,12 +4,12 @@ from calculos import calculariva
 
 def convertir_coche_a_json(coche):
     d = {}
-    d['id'] = coche[0]
-    d['nombre'] = coche[1]
-    d['descripcion'] = coche[2]
-    d['precio'] = float(coche[3])
-    d['precioiva'] = float(calculariva(float(coche[3])))
-    d['foto'] = coche[4]
+    d['id'] = sanitize_field(coche[0])
+    d['nombre'] = sanitize_field(coche[1])
+    d['descripcion'] = sanitize_field(coche[2])
+    d['precio'] = float(sanitize_field(coche[3]))
+    d['precioiva'] = float(calculariva(float(sanitize_field(coche[3]))))
+    d['foto'] = sanitize_field(coche[4])
     return d         
 
 #funcion para meter el coche en la bd
