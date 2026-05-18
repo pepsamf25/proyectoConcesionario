@@ -31,6 +31,10 @@ def registro():
         respuesta={"status":"Bad request"}
         code=401
     return jsonify(respuesta), code
+def logout():
+ respuesta,code= controlador_usuarios.logout()
+ response=make_response(jsonify(respuesta),code)
+ return response
 
 
 @bp.route("/logout",methods=['GET'])

@@ -3,9 +3,13 @@ import os
 from flask_wtf.csrf import CSRFProtect 
 from variables import cargarvariables
 from funciones_auxiliares import sanitize_field
+from funciones_auxiliares import prepare_response_extra_headers
 
 def create_app():
     app = Flask(__name__)
+
+    #Configuracion cabecera
+    extra_headers=prepare_response_extra_headers(True)
 
     # configuración...
     app.config.setdefault('DEBUG', True)

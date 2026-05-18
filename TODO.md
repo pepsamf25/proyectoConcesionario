@@ -6,14 +6,13 @@
 
 ### Seguridad:
 - Inyección XSS:
-    - Controlar el Content-type de cada petición  
     - HAY QUE VALIDAR (comparar tipos, tamaño, posibles valores,,) TODOS LOS DATOS QUE SE RECIBEN Y SOBRE TODO SI SON ARCHIVOS
+    - Sanitizar/Codificar la salida: en todos los controladores donde se devuelvan datos. Por ejemplo, en el archivo controladores_chuches.py
 - Cifrado de claves:
     - PEPPER_KEY -> pasar variable de entorno a docker-compose + kubernetes
 - Evitar CSRF:
     - WTF_SECRET_KEY -> pasar variable de entorno a docker-compose + kubernetes
 - Establecer cabeceras seguras:
-    - Cambiar app.py
     - Cambiar cómo se da la respuesta en todas las rutas
 - Gestionar la sesión segura:
     - Con cookies:
