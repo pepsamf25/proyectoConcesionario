@@ -11,9 +11,6 @@
 - Cifrado de claves:
     - PEPPER_KEY -> pasar variable de entorno a docker-compose + kubernetes
 - Evitar CSRF:
-    - Añadir protección a app.py
-    - Añadir protección a index.html
-    - Añadir token CSRF a las páginas que lo requieran
     - WTF_SECRET_KEY -> pasar variable de entorno a docker-compose + kubernetes
 - Establecer cabeceras seguras:
     - Cambiar app.py
