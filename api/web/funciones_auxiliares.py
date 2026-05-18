@@ -3,6 +3,8 @@ import json
 import bleach
 import html
 from flask import session
+import bcrypt
+import os
 
 class Encoder(json.JSONEncoder):
     def default(self, obj):
@@ -73,3 +75,24 @@ def validar_session_admin():
             return False
     except Exception:
         return False
+
+def cipher_password(password):
+
+  PEPPER_KEY = os.getenv("PASSWORD_PEPPER")  # Hay que pasar esta variable de entorno en docker-compose y kubernetes
+
+  password_peppered = password + PEPPER_KEY
+  hashAndSalt = bcrypt.hashpw(password_peppered.encode("utf-8"), bcrypt.gensalt(10))
+  return hashAndSalt
+
+def compare_password(password_hash,password):
+   if password_hash is None:
+      return False
+   try:
+
+      PEPPER_KEY = os.getenv("PASSWORD_PEPPER")
+
+      password_peppered = password + PEPPER_KEY
+
+      return bcrypt.checkpw(password_peppered.encode("utf-8"),password_hash)
+   except:
+      return False

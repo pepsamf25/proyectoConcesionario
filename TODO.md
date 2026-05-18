@@ -12,11 +12,12 @@
     - HAY QUE VALIDAR (comparar tipos, tamaño, posibles valores,,) TODOS LOS DATOS QUE SE RECIBEN Y SOBRE TODO SI SON ARCHIVOS
     - Sanitizar/Codificar la salida: en todos los controladores donde se devuelvan datos. Por ejemplo, en el archivo controladores_chuches.py
 - Cifrado de claves:
-    - Utilizar funciones en controlador_usuarios.py: login_usuario y alta_usuario
+    - PEPPER_KEY -> pasar variable de entorno a docker-compose + kubernetes
 - Evitar CSRF:
     - Añadir protección a app.py
     - Añadir protección a index.html
     - Añadir token CSRF a las páginas que lo requieran
+    - WTF_SECRET_KEY -> pasar variable de entorno a docker-compose + kubernetes
 - Establecer cabeceras seguras:
     - Cambiar app.py
     - Cambiar cómo se da la respuesta en todas las rutas
