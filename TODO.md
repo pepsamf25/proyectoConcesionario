@@ -17,7 +17,6 @@
     - Con auth
     - Con tokens
 - Generar logs:
-    - Añadir líneas a app.py
     - En cualquier sitio que se quiera grabar en el log escribir app.logger.info("texto").
 - Comprobar que subir archivos y ver archivos este securizado
 - Conexión a la base de datos segura

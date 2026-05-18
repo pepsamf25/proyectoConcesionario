@@ -4,6 +4,42 @@ from flask_wtf.csrf import CSRFProtect
 from variables import cargarvariables
 from funciones_auxiliares import sanitize_field
 from funciones_auxiliares import prepare_response_extra_headers
+from logging.config import dictConfig
+
+os.makedirs("logs", exist_ok=True)
+
+dictConfig(
+    {
+        "version": 1,
+        "formatters": {
+            "default": {
+                "format": "[%(asctime)s] %(levelname)s in %(module)s: %(message)s",
+            }
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout",
+                "formatter": "default",
+            },
+            "file": {
+                "class": "logging.FileHandler",
+                "filename": "logs/flask.log",
+                "formatter": "default",
+            },
+            "time-rotate": {
+               "class": "logging.handlers.TimedRotatingFileHandler",
+                "filename": "logs/flask.log",
+                "when": "D",
+                "interval": 10,
+                "backupCount": 5,
+                "formatter": "default",
+            },
+        },
+        "root": {"level": "DEBUG", "handlers": ["console","time-rotate"]},
+    }
+
+)
 
 def create_app():
     app = Flask(__name__)
@@ -16,7 +52,7 @@ def create_app():
     app.config.from_pyfile('settings.py')
     csrf = CSRFProtect(app)
 
-   @app.before_request
+    @app.before_request
     def csrf_protect():
        if not request.path.startswith("/login") and not request.path.startswith("/registro"):
            csrf.protect()
@@ -32,6 +68,19 @@ def create_app():
         else:
             g.cleaned_json = {}
 
+    @app.after_request
+    def afterRequest(response):
+        response.headers['Server'] = 'API'
+        app.logger.info(
+            "path: %s | method: %s | status: %s | size: %s >>> %s",
+            request.path,
+            request.method,
+            response.status,
+            response.content_length,
+            request.remote_addr,
+        )
+        response.headers.extend(extra_headers)
+        return response
     #Configuracion sesiones con cookies
     app.config.update(PERMANENT_SESSION_LIFETIME=600)
     #app.config.update( SESSION_COOKIE_SECURE=True, SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE='Lax',) #CON HTTPS
