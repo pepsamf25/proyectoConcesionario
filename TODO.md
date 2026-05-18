@@ -13,7 +13,6 @@
 - Evitar CSRF:
     - WTF_SECRET_KEY -> pasar variable de entorno a docker-compose + kubernetes
 - Establecer cabeceras seguras:
-    - Cambiar cómo se da la respuesta en todas las rutas
 - Gestionar la sesión segura:
     - Con cookies:
         - Modificar app.py
