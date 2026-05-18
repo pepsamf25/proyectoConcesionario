@@ -1,12 +1,24 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, g
 import os
 from variables import cargarvariables
+from funciones_auxiliares import sanitize_field
 
 def create_app():
     app = Flask(__name__)
 
     # configuración...
     app.config.setdefault('DEBUG', True)
+
+    @app.before_request
+    def clean_request():
+        if request.is_json:
+            data = request.get_json(silent=True)
+            if data is not None:
+                g.cleaned_json = sanitize_field(data)
+            else:
+                g.cleaned_json = {}
+        else:
+            g.cleaned_json = {}
 
     # Importar y registrar blueprints aquí (evita side-effects en import)
     from rutas_usuarios import bp as usuarios_bp

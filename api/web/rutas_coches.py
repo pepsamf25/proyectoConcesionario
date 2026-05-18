@@ -1,4 +1,4 @@
-from flask import request, Blueprint, jsonify
+from flask import request, Blueprint, jsonify, g
 # api.web.
 import controlador_coches as controlador_coches
 from funciones_auxiliares import Encoder
@@ -19,7 +19,7 @@ def coche_por_id(id):
 def guardar_coche():
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
-        coche_json = request.json
+        coche_json = g.cleaned_json
         nombre = coche_json["nombre"]
         descripcion = coche_json["descripcion"]
         precio=coche_json["precio"]
@@ -39,7 +39,7 @@ def eliminar_coche(id):
 def actualizar_coche():
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
-        coche_json = request.json
+        coche_json = g.cleaned_json
         id = coche_json["id"]
         nombre = coche_json["nombre"]
         descripcion = coche_json["descripcion"]

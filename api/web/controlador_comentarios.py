@@ -1,13 +1,15 @@
 from bd import obtener_conexion
 import sys
 import datetime as dt
+from flask import session
+from funciones_auxiliares import sanitize_field
 
 
 def convertir_comentario_a_json(comentario):
     d = {}
-    d['id'] = comentario[0]
-    d['usuario'] = comentario[1]
-    d['descripcion'] = comentario[2]
+    d['id'] = sanitize_field(comentario[0])
+    d['usuario'] = sanitize_field(comentario[1])
+    d['descripcion'] = sanitize_field(comentario[2])
     return d
 
 #funcino para meter nuevos comentarios a la bd

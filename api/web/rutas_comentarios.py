@@ -1,5 +1,6 @@
 from __future__ import print_function
-from flask import request,Blueprint, jsonify
+from flask import request,Blueprint, jsonify, g
+from funciones_auxiliares import Encoder
 import controlador_comentarios
 
 bp = Blueprint('comentarios', __name__)
@@ -8,7 +9,7 @@ bp = Blueprint('comentarios', __name__)
 def login():
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
-        comentario_json = request.json
+        comentario_json = g.cleaned_json
         usuario = comentario_json['usuario']
         descripcion = comentario_json['descripcion']
         respuesta,code= controlador_comentarios.insertar_comentario(usuario,descripcion)
