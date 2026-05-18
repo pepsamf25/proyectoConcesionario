@@ -32,6 +32,11 @@ def create_app():
         else:
             g.cleaned_json = {}
 
+    #Configuracion sesiones con cookies
+    app.config.update(PERMANENT_SESSION_LIFETIME=600)
+    #app.config.update( SESSION_COOKIE_SECURE=True, SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE='Lax',) #CON HTTPS
+    app.config.update( SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE='Lax',)  # CON HTTP
+
     # Importar y registrar blueprints aquí (evita side-effects en import)
     from rutas_usuarios import bp as usuarios_bp
     app.register_blueprint(usuarios_bp, url_prefix='/api/usuarios')

@@ -7,6 +7,7 @@ bp = Blueprint('usuarios', __name__)
 
 @bp.route("/login",methods=['POST'])
 def login():
+     if (validar_session_normal()):
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         login_json = g.cleaned_json
@@ -21,6 +22,7 @@ def login():
 
 @bp.route("/registro",methods=['POST'])
 def registro():
+     if (validar_session_normal()):
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         login_json = g.cleaned_json
@@ -36,6 +38,7 @@ def registro():
 
 @bp.route("/logout",methods=['GET'])
 def logout():
+     if (validar_session_normal()):
     respuesta,code= controlador_usuarios.logout()
     response=make_response(jsonify(respuesta),code)
     return response

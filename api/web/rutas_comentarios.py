@@ -7,6 +7,7 @@ bp = Blueprint('comentarios', __name__)
 
 @bp.route("/",methods=['POST'])
 def login():
+     if (validar_session_normal()):
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         comentario_json = g.cleaned_json
@@ -21,6 +22,7 @@ def login():
 
 @bp.route("/",methods=['GET'])
 def consultaComentarios():
+     if (validar_session_normal()):
     respuesta,code= controlador_comentarios.obtener_comentarios()
     response=make_response(jsonify(respuesta),code)
     return response

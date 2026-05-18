@@ -77,5 +77,12 @@ def alta_usuario(username,password,perfil,correo):
     return ret,code     
 
 def logout():
-    return {"status":"OK"},200
+   try:
+    delete_session()
+    ret={"status":"OK"}
+    code=200
+  except:
+    ret={"status":"ERROR"}
+    code=500
+  return ret,code
 

@@ -10,6 +10,7 @@ bp = Blueprint('ficheros', __name__)
 @bp.route ('/', methods=['POST']) 
 def upload():
     try:
+         if (validar_session_normal()):
         contenido= request.files['fichero'] 
         nombre = request.form.get("nombre")
         respuesta,code = controlador_ficheros.guardar_fichero(nombre,contenido)
@@ -23,6 +24,7 @@ def upload():
 @bp.route ('/<archivo>', methods=['GET']) 
 def ver(archivo):
     try:
+         if (validar_session_normal()):
         respuesta,code = controlador_ficheros.ver_fichero(archivo)
         response=make_response(jsonify(respuesta),code)
     except:
