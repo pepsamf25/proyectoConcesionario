@@ -27,3 +27,9 @@ def ver(archivo):
         respuesta= {"status": "ERROR"}
         code=500
     return jsonify(respuesta), code
+
+@bp.route("/logout",methods=['GET'])
+def logout():
+ respuesta,code= controlador_usuarios.logout()
+ response=make_response(jsonify(respuesta),code)
+ return response

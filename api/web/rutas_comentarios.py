@@ -23,5 +23,8 @@ def consultaComentarios():
     respuesta,code= controlador_comentarios.obtener_comentarios()
     return jsonify(respuesta), code
 
-
-
+@bp.route("/logout",methods=['GET'])
+def logout():
+    respuesta,code= controlador_usuarios.logout()
+    response=make_response(jsonify(respuesta),code)
+    return response
