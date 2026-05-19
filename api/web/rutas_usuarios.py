@@ -16,7 +16,7 @@ def login():
         respuesta,code= controlador_usuarios.login_usuario(username,password)
         response=make_response(jsonify(respuesta),code)
     else:
-        respuesta={"status":"Bad request"}
+        response={"status":"Bad request"}
         code=401
     return response
 
@@ -32,7 +32,7 @@ def registro():
         respuesta,code= controlador_usuarios.alta_usuario(username,password,profile)
         response=make_response(jsonify(respuesta),code)
     else:
-        respuesta={"status":"Bad request"}
+        response={"status":"Bad request"}
         code=401
     return response
 

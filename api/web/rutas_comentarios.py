@@ -16,7 +16,7 @@ def login():
         respuesta,code= controlador_comentarios.insertar_comentario(usuario,descripcion)
         response=make_response(jsonify(respuesta),code)
     else:
-        respuesta={"status":"Bad request"}
+        response={"status":"Bad request"}
         code=401
     return response
 

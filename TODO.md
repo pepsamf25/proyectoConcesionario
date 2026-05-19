@@ -12,7 +12,6 @@
     - PEPPER_KEY -> pasar variable de entorno a docker-compose + kubernetes
 - Evitar CSRF:
     - WTF_SECRET_KEY -> pasar variable de entorno a docker-compose + kubernetes
-- Establecer cabeceras seguras:
 - Gestionar la sesión segura:
     - Con auth
     - Con tokens

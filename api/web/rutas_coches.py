@@ -57,7 +57,7 @@ def actualizar_coche():
         respuesta,code=controlador_coches.actualizar_coche(id,nombre,descripcion,precio,foto)
         response=make_response(jsonify(respuesta),code)
     else:
-        respuesta={"status":"Bad request"}
+        response={"status":"Bad request"}
         code=401
     return response
 

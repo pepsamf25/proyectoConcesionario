@@ -17,7 +17,7 @@ def upload():
         response=make_response(jsonify(respuesta),code)
     except Exception as e:
         print(f"Error subiendo archivo: {e}", flush=True)
-        respuesta={"status": "ERROR"}
+        response={"status": "ERROR"}
         code=500
     return response
 
@@ -28,7 +28,7 @@ def ver(archivo):
         respuesta,code = controlador_ficheros.ver_fichero(archivo)
         response=make_response(jsonify(respuesta),code)
     except:
-        respuesta= {"status": "ERROR"}
+        response= {"status": "ERROR"}
         code=500
     return response
 
