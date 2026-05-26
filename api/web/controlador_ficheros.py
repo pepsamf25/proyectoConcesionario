@@ -4,6 +4,7 @@ import sys
 import subprocess
 import traceback
 from flask import jsonify
+from app import app
 
 #funcion para guardar el fichero 
 def guardar_fichero(nombre,contenido):

@@ -8,6 +8,10 @@ from logging.config import dictConfig
 
 os.makedirs("logs", exist_ok=True)
 
+
+csrf = CSRFProtect()
+
+
 dictConfig(
     {
         "version": 1,
@@ -50,7 +54,6 @@ def create_app():
     # configuración...
     app.config.setdefault('DEBUG', True)
     app.config.from_pyfile('settings.py')
-    csrf = CSRFProtect(app)
 
     @app.before_request
     def csrf_protect():
