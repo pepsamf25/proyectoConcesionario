@@ -12,6 +12,16 @@ services:
       - mariadb_datab10:/var/lib/mysql
       - ./Concesionario.sql:/docker-entrypoint-initdb.d/Concesionario.sql:ro
     user: mysql
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadminb10
+    restart: unless-stopped
+    environment:
+      - PMA_HOST=mariadb
+    ports:
+      - 7110:80
+    depends_on:
+      - mariadb
   python:
     build: ./api
     container_name: pythonb10
