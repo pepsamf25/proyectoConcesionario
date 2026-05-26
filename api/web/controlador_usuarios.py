@@ -1,6 +1,8 @@
 from bd import obtener_conexion
 import sys
 import datetime as dt
+from funciones_auxiliares import cipher_password, compare_password, generate_csrf, create_session, delete_session
+from app import app
 
 #verifica que los datos coinciden con los de la bd
 def login_usuario(username,passwordIn):
@@ -45,6 +47,7 @@ def login_usuario(username,passwordIn):
     except:
         print("Excepcion al validar al usuario")   
         ret={"status":"ERROR"}
+        app.logger.info("Excepcion al validar al usuario %s", username)
         code=500
     return ret,code
 
@@ -74,15 +77,18 @@ def alta_usuario(username,password,perfil,correo):
         print("Excepcion al registrar al usuario")   
         ret={"status":"ERROR"}
         code=500
+        app.logger.info("Excepcion al registrar al usuario %s", username)
     return ret,code     
 
 def logout():
-   try:
-    delete_session()
-    ret={"status":"OK"}
-    code=200
-  except:
-    ret={"status":"ERROR"}
-    code=500
-  return ret,code
+    try:
+        delete_session()
+        ret={"status":"OK"}
+        code=200
+        app.logger.info("Usuario desconectado")
+    except:
+        ret={"status":"ERROR"}
+        code=500
+        app.logger.info("Excepcion al desconectar al usuario")
+    return ret,code
 

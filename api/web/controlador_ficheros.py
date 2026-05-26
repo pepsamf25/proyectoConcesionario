@@ -16,10 +16,12 @@ def guardar_fichero(nombre,contenido):
         contenido.save(ruta_fichero)
         respuesta={"status": "OK"}
         code=200
+        app.logger.info("Fichero %s guardado correctamente", nombre)
     except:
         print("Excepcion al guardar el fichero", flush=True)  
         respuesta={"status": "ERROR"}
         code=500
+        app.logger.info("Excepcion al guardar el fichero %s", nombre)
     return respuesta, code
 
 #funcion para ver el fichero 
@@ -32,8 +34,8 @@ def ver_fichero(nombre):
         salida = salida.read()
         respuesta={"contenido": salida}
         code=200
+        app.logger.info("Fichero %s leído correctamente", nombre)
         return respuesta, 200
-        
         #ruta_fichero = os.path.join("/app", "static", "archivos", nombre)
         #salida = open(ruta_fichero, "r", encoding="utf-8", errors="replace")
         #respuesta = salida.read()
@@ -43,6 +45,7 @@ def ver_fichero(nombre):
     
     except Exception as e:
         print("Excepcion al ver el fichero", e)   
+        app.logger.info("Excepcion al ver el fichero %s: %s", nombre, e)
         traceback.print_exc()
         return {"Error": str(e)}, 500    
 
