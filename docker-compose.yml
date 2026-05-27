@@ -23,7 +23,7 @@ services:
     security_opt:
       - no-new-privileges:true
     depends_on:
-      mariadb
+      - mariadb
     networks:
       frontend_net:
       backend_net:
