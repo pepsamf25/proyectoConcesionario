@@ -13,16 +13,28 @@
     <script>
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+      if (sessionStorage.getItem("csrf_token")) {
+        myHeaders.append("X-CSRFToken", sessionStorage.getItem("csrf_token"))
+      }
 
         //funcion para enivar la info a la bd
         function enviarArchivo(){
             const formData = new FormData();
-            formData.append('fichero',document.getElementById("fichero").files[0]);
+          const fichero = document.getElementById("fichero").files[0];
+          if (!fichero) {
+            alert("Selecciona un archivo antes de enviar.");
+            return;
+          }
+          formData.append('fichero', fichero);
             formData.append('nombre',document.getElementById("nombre").value);
+          const csrfToken = sessionStorage.getItem("csrf_token");
             var requestOptions = {
                 method: 'POST',
                 body: formData
             };
+          if (csrfToken) {
+            requestOptions.headers = new Headers({"X-CSRFToken": csrfToken});
+          }
 
             fetch("/api/ficheros/", requestOptions)
                 .then(response => response.json())

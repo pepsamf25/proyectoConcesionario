@@ -48,6 +48,10 @@ dictConfig(
 def create_app():
     app = Flask(__name__)
     app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
+    # Seguridad: limitar el tamaño máximo de subida (por defecto 5MB)
+    app.config.setdefault('MAX_CONTENT_LENGTH', int(os.environ.get('MAX_CONTENT_LENGTH', 5 * 1024 * 1024)))
+    # Tipos de fichero permitidos (extensiones sin punto)
+    app.config.setdefault('ALLOWED_FILE_EXTENSIONS', set(os.environ.get('ALLOWED_FILE_EXTENSIONS', 'txt,png,jpg,jpeg,gif,pdf').split(',')))
     app.config.setdefault('WTF_CSRF_CHECK_DEFAULT', False)
     csrf.init_app(app)
 

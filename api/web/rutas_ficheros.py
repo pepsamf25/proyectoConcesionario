@@ -12,8 +12,12 @@ bp = Blueprint('ficheros', __name__)
 def upload():
     try:
         if validar_session_normal():
-            contenido = request.files['fichero']
+            contenido = request.files.get('fichero')
             nombre = request.form.get("nombre")
+            if contenido is None:
+                return make_response(jsonify({"status": "Bad request", "mensaje": "Falta el fichero"}), 400)
+            if nombre is None or nombre.strip() == "":
+                return make_response(jsonify({"status": "Bad request", "mensaje": "Falta el nombre"}), 400)
             respuesta, code = controlador_ficheros.guardar_fichero(nombre, contenido)
             response = make_response(jsonify(respuesta), code)
             return response
