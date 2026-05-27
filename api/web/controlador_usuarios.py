@@ -1,16 +1,23 @@
-from bd import obtener_conexion
-import sys
+import logging
 import datetime as dt
+from flask import current_app, has_app_context
+from bd import obtener_conexion
 from funciones_auxiliares import cipher_password, compare_password, generate_csrf, create_session, delete_session
-from app import app
+
+
+def _logger():
+    if has_app_context():
+        return current_app.logger
+    return logging.getLogger(__name__)
 
 #verifica que los datos coinciden con los de la bd
 def login_usuario(username,passwordIn):
+    conexion = None
     try:
         conexion = obtener_conexion()
         #print(cipher_password(passwordIn))
         with conexion.cursor() as cursor:
-            cursor.execute("SELECT perfil,clave,numeroAccesosErroneo FROM usuarios WHERE estado='activo' and usuario = %s",(username))
+            cursor.execute("SELECT perfil,clave,numeroAccesosErroneo,estado FROM usuarios WHERE usuario = %s", (username,))
             usuario = cursor.fetchone()
             
             if usuario is None:
@@ -19,40 +26,54 @@ def login_usuario(username,passwordIn):
                 perfil=usuario[0]
                 password=usuario[1]
                 numAccesosErroneos=usuario[2]
+                estado=usuario[3]
+                hoy=dt.date.today().strftime('%Y-%m-%d')
 
-                current_date = dt.date.today()
-                hoy=current_date.strftime('%Y-%m-%d')
-                    
-                if (compare_password(password.encode("utf-8"),passwordIn.encode("utf-8"))):
+                if estado != 'activo':
+                    ret = {"status": "ERROR","mensaje":"Usuario bloqueado"}
+                elif (compare_password(password, passwordIn)):
                     ret = {"status": "OK",
                            "csrf_token": generate_csrf(),
                            "perfil":perfil}
-                    app.logger.info("Acceso usuario %s correcto",username)
+                    _logger().info("Acceso usuario %s correcto",username)
                     create_session(username,perfil)
-                    numAccesosErroneos=0
-                    estado='activo'
+                    numAccesosErroneos = 0
+                    cursor.execute(
+                        "UPDATE usuarios SET numeroAccesosErroneo=%s, fechaUltimoAcceso=%s, estado=%s WHERE usuario = %s",
+                        (numAccesosErroneos, hoy, 'activo', username),
+                    )
+                    conexion.commit()
                 else:
-                    app.logger.info("Acceso usuario %s incorrecto",username)
-                    numAccesosErroneos=numAccesosErroneos+1
-                    if (numAccesosErroneos>2):
-                        estado="bloqueado"
-                        app.logger.info("Usuario %s bloqueado",username)
+                    _logger().info("Acceso usuario %s incorrecto",username)
+                    numAccesosErroneos = numAccesosErroneos + 1
+                    if numAccesosErroneos > 2:
+                        estado = 'bloqueado'
+                        _logger().info("Usuario %s bloqueado", username)
                     else:
-                        estado='activo'
+                        estado = 'activo'
+                    cursor.execute(
+                        "UPDATE usuarios SET numeroAccesosErroneo=%s, fechaUltimoAcceso=%s, estado=%s WHERE usuario = %s",
+                        (numAccesosErroneos, hoy, estado, username),
+                    )
+                    conexion.commit()
                     ret = {"status": "ERROR","mensaje":"Usuario/clave erroneo"}
-                cursor.execute("UPDATE usuarios SET numeroAccesosErroneo=%s, fechaUltimoAcceso=%s, estado=%s WHERE usuario = %s",(numAccesosErroneos,hoy,estado,username))
-                conexion.commit()
-                conexion.close()
             code=200
     except:
         print("Excepcion al validar al usuario")   
         ret={"status":"ERROR"}
-        app.logger.info("Excepcion al validar al usuario %s", username)
+        _logger().info("Excepcion al validar al usuario %s", username)
         code=500
+    finally:
+        try:
+            if conexion is not None:
+                conexion.close()
+        except Exception:
+            pass
     return ret,code
 
 #meter el nuevo usuario en la bd
-def alta_usuario(username,password,perfil,correo):
+def alta_usuario(username,password,perfil):
+    conexion = None
     try:
         conexion = obtener_conexion()
         with conexion.cursor() as cursor:
@@ -60,10 +81,10 @@ def alta_usuario(username,password,perfil,correo):
             usuario = cursor.fetchone()
             if usuario is None:
                 passwordC=cipher_password(password)
-                cursor.execute("INSERT INTO usuarios(usuario,clave,correo,perfil,estado,numeroAccesosErroneo) VALUES(%s,%s,%s,'normal','activo',0)",(username,passwordC,correo))
+                cursor.execute("INSERT INTO usuarios(usuario,clave,perfil) VALUES(%s,%s,%s)",(username,passwordC,perfil))
                 if cursor.rowcount == 1:
                     conexion.commit()
-                    app.logger.info("Nuevo usuario creado")
+                    _logger().info("Nuevo usuario creado")
                     ret={"status": "OK" }
                     code=200
                 else:
@@ -77,7 +98,13 @@ def alta_usuario(username,password,perfil,correo):
         print("Excepcion al registrar al usuario")   
         ret={"status":"ERROR"}
         code=500
-        app.logger.info("Excepcion al registrar al usuario %s", username)
+        _logger().info("Excepcion al registrar al usuario %s", username)
+    finally:
+        try:
+            if conexion is not None:
+                conexion.close()
+        except Exception:
+            pass
     return ret,code     
 
 def logout():
@@ -85,10 +112,10 @@ def logout():
         delete_session()
         ret={"status":"OK"}
         code=200
-        app.logger.info("Usuario desconectado")
+        _logger().info("Usuario desconectado")
     except:
         ret={"status":"ERROR"}
         code=500
-        app.logger.info("Excepcion al desconectar al usuario")
+        _logger().info("Excepcion al desconectar al usuario")
     return ret,code
 

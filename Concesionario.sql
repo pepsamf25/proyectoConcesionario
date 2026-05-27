@@ -15,7 +15,10 @@ CREATE TABLE comentarios(
 CREATE TABLE usuarios(
 	usuario VARCHAR(100) NOT NULL PRIMARY KEY,
     clave VARCHAR(255) NOT NULL,
-    perfil VARCHAR(100) NOT NULL
+    perfil VARCHAR(100) NOT NULL,
+    estado VARCHAR(20) NOT NULL DEFAULT 'activo',
+    numeroAccesosErroneo INT NOT NULL DEFAULT 0,
+    fechaUltimoAcceso DATE DEFAULT NULL
 );
 INSERT INTO `usuarios` (`usuario`, `clave`, `perfil`) VALUES ('root','1234', 'admin');
 

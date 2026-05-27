@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Last-Modified" content="0">
+    <link rel="stylesheet" href="estilos.css">
+    <title>Insertar archivos</title>
+    <script>
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        //funcion para enivar la info a la bd
+        function enviarArchivo(){
+            const formData = new FormData();
+            formData.append('fichero',document.getElementById("fichero").files[0]);
+            formData.append('nombre',document.getElementById("nombre").value);
+            var requestOptions = {
+                method: 'POST',
+                body: formData
+            };
+
+            fetch("/api/ficheros/", requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status == "OK"){
+                        alert("Archivo subido correctamente.");
+                        location.href="index.html"
+                    } else {
+                        alert("El archivo no ha podido subirse.");
+                    }
+                })
+                .catch(error => {
+                    console.log('error', error);
+                    alert("Ha habido un error al recuperar el archivo. Refresque la página.");
+                });
+        }
+
+        //funcion para mostrar el archivo deseado
+        function verArchivo(){
+  fetch("/api/ficheros/" + encodeURIComponent(document.getElementById("nombreArchivo").value))
+    .then(async response => {
+      let data = null;
+
+      try {
+        data = await response.json();
+      } catch {
+        // el body no era JSON (HTML, texto plano...)
+      }
+
+      if (response.ok) {
+        document.getElementById("contenidoArchivo").innerText = data?.contenido ?? "";
+      } else {
+        document.getElementById("contenidoArchivo").innerText =
+          data?.error ?? "EL CONTENIDO NO ESTÁ DISPONIBLE.";
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      alert("Ha habido un error al recuperar el archivo. Refresque la página.");
+    });
+}
+
+
+ 
+    </script>
+</head>
+<body>
+    <h1>SUBIR UN ARCHIVO</h1>
+        <label>Nombre del archivo</label><input type="text" name="nombre" id="nombre"><br>
+        <label>Archivo</label><input type="file" name="fichero" id="fichero"><br>
+        <button type="button" onclick="enviarArchivo()">ENVIAR</button><br>
+    <h1>VER CONTENIDO DE UN ARCHIVO</h1>
+    <label>Nombre del archivo</label><input type="text" name="nombreArchivo" id="nombreArchivo"><br>
+    <button type="button" onclick="verArchivo()">Ver</button><br>
+    <label>Contenido del archivo</label><textarea id="contenidoArchivo"></textarea><br>
+
+</body>
+</html>

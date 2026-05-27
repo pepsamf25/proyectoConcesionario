@@ -7,33 +7,27 @@ bp = Blueprint('usuarios', __name__)
 
 @bp.route("/login", methods=['POST'])
 def login():
-    if validar_session_normal():
-        content_type = request.headers.get('Content-Type')
-        if content_type == 'application/json':
-            login_json = g.cleaned_json
-            username = login_json['username']
-            password = login_json['password']
-            respuesta, code = controlador_usuarios.login_usuario(username, password)
-            response = make_response(jsonify(respuesta), code)
-            return response
-        return make_response(jsonify({"status": "Bad request"}), 401)
-    return make_response(jsonify({"status": "Unauthorized"}), 401)
+    if request.is_json:
+        login_json = g.cleaned_json
+        username = login_json['username']
+        password = login_json['password']
+        respuesta, code = controlador_usuarios.login_usuario(username, password)
+        response = make_response(jsonify(respuesta), code)
+        return response
+    return make_response(jsonify({"status": "Bad request"}), 400)
 
 
 @bp.route("/registro", methods=['POST'])
 def registro():
-    if validar_session_normal():
-        content_type = request.headers.get('Content-Type')
-        if content_type == 'application/json':
-            login_json = g.cleaned_json
-            username = login_json['username']
-            password = login_json['password']
-            profile = login_json['profile']
-            respuesta, code = controlador_usuarios.alta_usuario(username, password, profile)
-            response = make_response(jsonify(respuesta), code)
-            return response
-        return make_response(jsonify({"status": "Bad request"}), 401)
-    return make_response(jsonify({"status": "Unauthorized"}), 401)
+    if request.is_json:
+        login_json = g.cleaned_json
+        username = login_json['username']
+        password = login_json['password']
+        profile = login_json.get('profile', 'normal')
+        respuesta, code = controlador_usuarios.alta_usuario(username, password, profile)
+        response = make_response(jsonify(respuesta), code)
+        return response
+    return make_response(jsonify({"status": "Bad request"}), 400)
 
 
 @bp.route("/logout", methods=['GET'])

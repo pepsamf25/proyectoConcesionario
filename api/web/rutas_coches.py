@@ -2,7 +2,6 @@ from flask import request, Blueprint, jsonify, g, make_response
 # api.web.
 import controlador_coches as controlador_coches
 from funciones_auxiliares import Encoder, validar_session_normal, prepare_response_extra_headers
-from app import app
 
 bp = Blueprint('coches', __name__)
 

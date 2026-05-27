@@ -1,9 +1,16 @@
+import logging
+from flask import current_app, has_app_context
 from bd import obtener_conexion
 import sys
 import datetime as dt
 from flask import session
 from funciones_auxiliares import sanitize_field
-from app import app
+
+
+def _logger():
+    if has_app_context():
+        return current_app.logger
+    return logging.getLogger(__name__)
 
 
 def convertir_comentario_a_json(comentario):
@@ -23,12 +30,12 @@ def insertar_comentario(usuario, descripcion):
         conexion.close()
         ret={"status": "OK" }
         code=200
-        app.logger.info("Comentario insertado correctamente")
+        _logger().info("Comentario insertado correctamente")
     except:
         ret={"status": "ERROR" }
         print("Excepcion al insertar un comentario", flush=True)
         code=500   
-        app.logger.info("Excepcion al insertar un comentario")
+        _logger().info("Excepcion al insertar un comentario")
     return ret,code
 
 #fncion para obtener los comentarios de la bd
@@ -44,12 +51,12 @@ def obtener_comentarios():
                     comentariosjson.append(convertir_comentario_a_json(comentario))
         conexion.close()
         code=200
-        app.logger.info("Comentarios consultados correctamente")
+        _logger().info("Comentarios consultados correctamente")
     except Exception as e:
         import traceback
         print("Excepcion al consultar todos los comentarios", e, flush=True)
         traceback.print_exc()
-        app.logger.info("Excepcion al consultar todos los comentarios")
+        _logger().info("Excepcion al consultar todos los comentarios")
         code=500
 
     # return {"status" : "ERROR", "detalle": str(e)}, 500 

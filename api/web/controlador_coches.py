@@ -1,7 +1,14 @@
+import logging
+from flask import current_app, has_app_context
 from bd import obtener_conexion
 from calculos import calculariva
 from funciones_auxiliares import sanitize_field
-from app import app
+
+
+def _logger():
+    if has_app_context():
+        return current_app.logger
+    return logging.getLogger(__name__)
 
 
 def convertir_coche_a_json(coche):
@@ -24,7 +31,7 @@ def insertar_coche(nombre, descripcion, precio, foto):
     conexion.close()
     ret={"status": "OK" }
     code=200
-    app.logger.info("Coche insertado correctamente")
+    _logger().info("Coche insertado correctamente")
     return ret,code
 
 #funcion para tomar los coches de la bd
@@ -40,10 +47,10 @@ def obtener_coches():
                     cochesjson.append(convertir_coche_a_json(coche))
         conexion.close()
         code=200
-        app.logger.info("Coches consultados correctamente")
+        _logger().info("Coches consultados correctamente")
     except:
         print("Excepcion al consultar todos los coches", flush=True)
-        app.logger.info("Excepcion al consultar todos los coches")
+        _logger().info("Excepcion al consultar todos los coches")
         code=500
     return cochesjson,code
 
@@ -59,11 +66,11 @@ def obtener_coche_por_id(id):
                 cochejson = convertir_coche_a_json(coche)
         conexion.close()
         code=200
-        app.logger.info("Coche consultado correctamente")
+        _logger().info("Coche consultado correctamente")
     except:
         print("Excepcion al consultar un coche", flush=True)
         code=500
-        app.logger.info("Excepcion al consultar un coche")
+        _logger().info("Excepcion al consultar un coche")
     return cochejson,code
 
 #funcion para eliminar un coche determinado mediante el id
@@ -79,12 +86,12 @@ def eliminar_coche(id):
         conexion.commit()
         conexion.close()
         code=200
-        app.logger.info("Coche eliminado correctamente")
+        _logger().info("Coche eliminado correctamente")
     except:
         print("Excepcion al eliminar un coche", flush=True)
         ret = {"status": "Failure" }
         code=500
-        app.logger.info("Excepcion al eliminar un coche")
+        _logger().info("Excepcion al eliminar un coche")
     return ret,code
 
 #funcion para modificar la info del coche mediante el id
@@ -100,17 +107,17 @@ def actualizar_coche(id, nombre, descripcion, precio, foto):
             conexion.commit()
 
             if cursor.rowcount == 1:
-                app.logger.info("Coche actualizado correctamente")
+                _logger().info("Coche actualizado correctamente")
                 return {"status": "OK"}, 200
             else:
-                app.logger.info("No se encontró el coche con id %s para actualizar", id)
+                _logger().info("No se encontró el coche con id %s para actualizar", id)
                 return {"status": "Failure", "detalle": "No se actualizó ninguna fila"}, 404
 
     except Exception as e:
         import traceback
         print(f"Excepcion al actualizar un coche: {e}", flush=True)
         traceback.print_exc()
-        app.logger.info(f"Excepcion al actualizar un coche: {e}")
+        _logger().info(f"Excepcion al actualizar un coche: {e}")
         return {"status": "ERROR", "detalle": str(e)}, 500
     finally:
         try:

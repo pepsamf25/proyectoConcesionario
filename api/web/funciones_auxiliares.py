@@ -2,11 +2,13 @@ import decimal
 import json
 import bleach
 import html
-from flask import session
+import secrets
+from flask import session, has_request_context
 import bcrypt
 import os
 import datetime
 from werkzeug.http import http_date
+from flask_wtf.csrf import generate_csrf as flask_generate_csrf
 
 class Encoder(json.JSONEncoder):
     def default(self, obj):
@@ -47,12 +49,21 @@ def prepare_response_extra_headers(include_security_headers):
     return response_extra_headers
 
 def create_session(usuario,perfil):
-    session["usuario"] = usuario
-    session["perfil"] = perfil
+    if has_request_context():
+        session["usuario"] = usuario
+        session["perfil"] = perfil
 
 
 def delete_session():
-    session.clear()
+    if has_request_context():
+        session.clear()
+
+
+def generate_csrf():
+    try:
+        return flask_generate_csrf()
+    except Exception:
+        return secrets.token_urlsafe(32)
 
 
 def validar_session_normal():
@@ -79,25 +90,29 @@ def validar_session_admin():
         return False
 
 def cipher_password(password):
+    PEPPER_KEY = os.getenv("PASSWORD_PEPPER")  # Hay que pasar esta variable de entorno en docker-compose y kubernetes
+    if PEPPER_KEY is None:
+        PEPPER_KEY = ""
 
-  PEPPER_KEY = os.getenv("PASSWORD_PEPPER")  # Hay que pasar esta variable de entorno en docker-compose y kubernetes
-
-  password_peppered = password + PEPPER_KEY
-  hashAndSalt = bcrypt.hashpw(password_peppered.encode("utf-8"), bcrypt.gensalt(10))
-  return hashAndSalt
+    password_peppered = password + PEPPER_KEY
+    hashAndSalt = bcrypt.hashpw(password_peppered.encode("utf-8"), bcrypt.gensalt(10))
+    return hashAndSalt.decode("utf-8")
 
 def compare_password(password_hash,password):
-   if password_hash is None:
-      return False
-   try:
+    if password_hash is None:
+        return False
+    try:
+        if isinstance(password_hash, str):
+            password_hash = password_hash.encode("utf-8")
+        PEPPER_KEY = os.getenv("PASSWORD_PEPPER")
+        if PEPPER_KEY is None:
+            PEPPER_KEY = ""
 
-      PEPPER_KEY = os.getenv("PASSWORD_PEPPER")
+        password_peppered = password + PEPPER_KEY
 
-      password_peppered = password + PEPPER_KEY
-
-      return bcrypt.checkpw(password_peppered.encode("utf-8"),password_hash)
-   except:
-      return False
+        return bcrypt.checkpw(password_peppered.encode("utf-8"),password_hash)
+    except:
+        return False
 
 def prepare_response_extra_headers(include_security_headers):
 

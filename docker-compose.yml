@@ -6,27 +6,53 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
       MARIADB_USER: ${MARIADB_USER}
-      MARIADB_USER_PASSWORD: ${MARIADB_USER_PASSWORD}
+      MARIADB_PASSWORD: ${MARIADB_USER_PASSWORD}
       MARIADB_DATABASE: ${MARIADB_DATABASE}
     volumes:
       - mariadb_datab10:/var/lib/mysql
       - ./Concesionario.sql:/docker-entrypoint-initdb.d/Concesionario.sql:ro
     user: mysql
+    networks:
+      backend_net:
+
   python:
     build: ./api
     container_name: pythonb10
     env_file:
       - .env
+    security_opt:
+      - no-new-privileges:true
     depends_on:
-      - mariadb
+      mariadb
+    networks:
+      frontend_net:
+      backend_net:
+
   apache-waf:
-    build: ./apache
+    build: ./apacheSeguro/apache
     container_name: apacheb10
     ports:
       - 6110:80
+      - 6443:443
+    security_opt:
+      - no-new-privileges:true
     depends_on:
       - python
-    links:
-      - python
+    networks:
+      frontend_net:
+
 volumes:
   mariadb_datab10:
+
+networks:
+  frontend_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.10.0/24
+  backend_net:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.31.20.0/24
