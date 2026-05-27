@@ -47,13 +47,14 @@ dictConfig(
 
 def create_app():
     app = Flask(__name__)
+    app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
 
     #Configuracion cabecera
     extra_headers=prepare_response_extra_headers(True)
 
     # configuración...
     app.config.setdefault('DEBUG', True)
-    app.config.from_pyfile('settings.py')
+    app.config.from_pyfile('settings.py', silent=True)
 
     @app.before_request
     def csrf_protect():

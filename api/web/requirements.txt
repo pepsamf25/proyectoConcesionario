@@ -7,7 +7,4 @@ pytest
 webdriver-manager
 bleach
 bcrypt
-os
-fask_wtf.csrf
-datetime
-werkzeug.http
+Flask-WTF
