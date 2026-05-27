@@ -26,8 +26,7 @@ def coche_por_id(id):
 @bp.route("/", methods=["POST"])
 def guardar_coche():
     if validar_session_normal():
-        content_type = request.headers.get('Content-Type')
-        if content_type == 'application/json':
+        if request.is_json:
             coche_json = g.cleaned_json
             nombre = coche_json["nombre"]
             descripcion = coche_json["descripcion"]
@@ -37,7 +36,7 @@ def guardar_coche():
             response = make_response(jsonify(respuesta), code)
             return response
         else:
-            return make_response(jsonify({"status": "Bad request"}), 401)
+            return make_response(jsonify({"status": "Bad request"}), 400)
     return make_response(jsonify({"status": "Unauthorized"}), 401)
 
 
@@ -53,8 +52,7 @@ def eliminar_coche(id):
 @bp.route("/", methods=["PUT"])
 def actualizar_coche():
     if validar_session_normal():
-        content_type = request.headers.get('Content-Type')
-        if content_type == 'application/json':
+        if request.is_json:
             coche_json = g.cleaned_json
             id = coche_json["id"]
             nombre = coche_json["nombre"]
@@ -65,6 +63,6 @@ def actualizar_coche():
             response = make_response(jsonify(respuesta), code)
             return response
         else:
-            return make_response(jsonify({"status": "Bad request"}), 401)
+            return make_response(jsonify({"status": "Bad request"}), 400)
     return make_response(jsonify({"status": "Unauthorized"}), 401)
 

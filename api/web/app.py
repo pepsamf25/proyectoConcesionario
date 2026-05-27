@@ -48,6 +48,8 @@ dictConfig(
 def create_app():
     app = Flask(__name__)
     app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
+    app.config.setdefault('WTF_CSRF_CHECK_DEFAULT', False)
+    csrf.init_app(app)
 
     #Configuracion cabecera
     extra_headers=prepare_response_extra_headers(True)
@@ -58,7 +60,7 @@ def create_app():
 
     @app.before_request
     def csrf_protect():
-       if not request.path.startswith("/login") and not request.path.startswith("/registro"):
+         if request.path not in ("/api/usuarios/login", "/api/usuarios/registro"):
            csrf.protect()
 
     @app.before_request

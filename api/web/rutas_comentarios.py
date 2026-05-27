@@ -8,15 +8,14 @@ bp = Blueprint('comentarios', __name__)
 @bp.route("/", methods=['POST'])
 def login():
     if validar_session_normal():
-        content_type = request.headers.get('Content-Type')
-        if content_type == 'application/json':
+        if request.is_json:
             comentario_json = g.cleaned_json
             usuario = comentario_json['usuario']
             descripcion = comentario_json['descripcion']
             respuesta, code = controlador_comentarios.insertar_comentario(usuario, descripcion)
             response = make_response(jsonify(respuesta), code)
             return response
-        return make_response(jsonify({"status": "Bad request"}), 401)
+        return make_response(jsonify({"status": "Bad request"}), 400)
     return make_response(jsonify({"status": "Unauthorized"}), 401)
 
 

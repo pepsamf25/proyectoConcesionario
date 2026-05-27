@@ -15,6 +15,9 @@
     <script>
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        if (sessionStorage.getItem("csrf_token")) {
+            myHeaders.append("X-CSRFToken", sessionStorage.getItem("csrf_token"))
+        }
         onload=function(){
             pedirCoches();
         }

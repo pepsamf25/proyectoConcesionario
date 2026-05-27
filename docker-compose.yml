@@ -11,7 +11,6 @@ services:
     volumes:
       - mariadb_datab10:/var/lib/mysql
       - ./Concesionario.sql:/docker-entrypoint-initdb.d/Concesionario.sql:ro
-    user: mysql
     networks:
       backend_net:
 
@@ -22,6 +21,9 @@ services:
       - .env
     security_opt:
       - no-new-privileges:true
+    environment:
+      DB_USERNAME: agenteb10
+      DB_PASSWORD: 0trab10clave$1234
     depends_on:
       - mariadb
     networks:

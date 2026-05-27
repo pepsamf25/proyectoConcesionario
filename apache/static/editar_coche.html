@@ -15,6 +15,9 @@
     <script>
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        if (sessionStorage.getItem("csrf_token")) {
+            myHeaders.append("X-CSRFToken", sessionStorage.getItem("csrf_token"))
+        }
 
         var queryString = window.location.search;
         var urlParams = new URLSearchParams(queryString);
@@ -47,7 +50,7 @@
             document.getElementById("nombre").value = coche.nombre;
             document.getElementById("descripcion").value = coche.descripcion;
             document.getElementById("precio").value = coche.precio;
-            document.getElementById("foto").src = coche.foto;
+            document.getElementById("fotoVista").src = coche.foto;
         }
 
         //función para guardar la informacion modificada en la bd
@@ -126,7 +129,7 @@
                 <input required type="number" class="input" placeholder="Precio" name="precio" id="precio">
                 <input required type="text" class="input" placeholder="Foto" name="foto" id="foto">                
                 <input required type="file" class="input" placeholder="Archivo Foto" name="filefoto" id="filefoto">
-                <img src="#" alt="Foto" width="500" height="600" id="foto">
+                <img src="#" alt="Foto" width="500" height="600" id="fotoVista">
                 <button type="button" onclick="guardar()" class="button is-success mt-2">Guardar</button>
                 <a href="coches.html" class="button is-primary mt-2">Volver</a>
                 </form>
